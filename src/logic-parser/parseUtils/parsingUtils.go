@@ -1,7 +1,7 @@
-package parser
+package parseUtils
+
 import (
 	"errors"
-	"fmt"
 	"strings"
 )
 
@@ -126,14 +126,12 @@ func isOperator(symbol rune) bool {
 }
 
 
-func CleanString(in string) error {
+func CleanString(in string) (string, error) {
     //var depth int = 0
     var finalStr string
 
     finalStr = changeSpecialSymbols(in)
     finalStr = removeWhitespaces(finalStr)
-
-    fmt.Println(finalStr)
 
     // it should not break with your shitty unicode, even though
     // theres literally no special character to use here
@@ -145,7 +143,7 @@ func CleanString(in string) error {
         } else if isDelimiterClosed(symbol) {
             err := syntax.Pop()
             if err != nil {
-                return errors.New("fuck you!!!!")
+                return "", errors.New("fuck you!!!!")
             }
         } else {
             continue
@@ -153,8 +151,8 @@ func CleanString(in string) error {
     }
 
     if syntax.IsEmpty() == false {
-        return errors.New("fuck you!!!!")
+        return "", errors.New("fuck you!!!!")
     }
-    return nil
+    return finalStr, nil
 }
 

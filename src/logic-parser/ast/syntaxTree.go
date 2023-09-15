@@ -2,10 +2,14 @@
 // this is my first ever attempt at actually parsing,
 // tokenizing and using an ast
 
-package ast
+package parser
+
+import (
+	"errors"
+)
 
 type Expr interface {
-    R() bool
+    Eval([]rune) bool
 }
 
 type Variable struct {
@@ -39,9 +43,10 @@ type Token struct {
 
 const TOKEN_END rune = 0x00
 
-func iterate(str string) *Token {
+func iterate(str string) (*Token, error) {
     var tokens *Token
     var head *Token
+
     for _, ch := range str {
         if tokens == nil {
             tokens = &Token{
@@ -57,19 +62,24 @@ func iterate(str string) *Token {
             Value: ch,
             Next: nil,
         }
+
         tokens = tokens.Next
-        continue
     }
+
+    if tokens == nil {
+        return tokens, errors.New("failed to tokenize input string(\"" + str + "\")")
+    }
+
     tokens.Next = &Token{
         Value: TOKEN_END,
         Next: nil,
     }
 
     tokens = head
-    return tokens
+    return tokens, nil
 }
 
-var variables = []rune {
+var Variables = []rune {
     'a',
     'b',
     'c',
@@ -96,6 +106,33 @@ var variables = []rune {
     'x',
     'y',
     'z',
+    // uppercase
+    'A',
+    'B',
+    'C',
+    'D',
+    'E',
+    'F',
+    'G',
+    'H',
+    'I',
+    'J',
+    'K',
+    'L',
+    'M',
+    'N',
+    'O',
+    'P',
+    'Q',
+    'R',
+    'S',
+    'T',
+    'U',
+    'V',
+    'W',
+    'X',
+    'Y',
+    'Z',
 }
 
 var operators = []rune{
@@ -109,14 +146,18 @@ var constants = []rune{
     '1',
 }
 
-func Parse(str string) Expr {
+func Parse(str string) (Expr, error) {
     // this is the head of the recursive functions
     var disjunction func() Expr
     var conjunction func() Expr
     var implication func() Expr
     var unaryExpr func() Expr
 
-    tokens := iterate(str)
+    tokens, tokenErr := iterate(str)
+
+    if tokenErr != nil {
+        return &Proposition{}, tokenErr
+    }
 
     match := func(compare []rune) bool {
         for _, el := range compare {
@@ -131,7 +172,7 @@ func Parse(str string) Expr {
     term := func() Expr {
         current := (*tokens).Value
 
-        if match(variables) {
+        if match(Variables) {
             return &Proposition{Name: current}
         } else if match(constants) {
             return &ConstantProposition{Name: current}
@@ -210,6 +251,6 @@ func Parse(str string) Expr {
     }
 
     var tree = disjunction()
-    return tree
+    return tree, nil
 }
 
