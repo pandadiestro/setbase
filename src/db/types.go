@@ -1,7 +1,6 @@
 package db
 
 type Register struct {
-    Name string     `json:"name"`
     Path string     `json:"path"`
     Sets []string   `json:"sets"`
 }

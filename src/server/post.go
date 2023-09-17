@@ -1,16 +1,16 @@
 package server
 
 import (
-	"setbase/src/db"
-	"setbase/src/test_db"
 	"encoding/json"
 	"log"
 	"net/http"
+	"setbase/src/db"
 	"strings"
 )
 
+var database *db.DB
+
 func EnableEndpoint(w *http.ResponseWriter) {
-    (*w).Header().Set("Content-Type", "application/json; charset=utf-8")
     (*w).Header().Set("Access-Control-Allow-Methods", "\"POST\", \"OPTIONS\"");
     (*w).Header().Set("Access-Control-Allow-Origin", "*");
     (*w).Header().Set("Access-Control-Allow-Headers", "*");
@@ -25,6 +25,7 @@ func GeneralHandle(w http.ResponseWriter, r *http.Request) {
     }
 }
 func QueryPost(w http.ResponseWriter, r *http.Request) {
+    w.Header().Set("Content-Type", "application/json; charset=utf-8")
     EnableEndpoint(&w)
 
     var data db.Query
@@ -34,8 +35,15 @@ func QueryPost(w http.ResponseWriter, r *http.Request) {
         log.Println(decodeErr)
     }
 
-    database := &db.DB{}
-    database.Fill(test_db.DB)
+    var startErr error
+
+    if database == nil {
+        database, startErr = db.StartDb()
+        if startErr != nil {
+            log.Println("db start error: " + startErr.Error())
+            w.WriteHeader(http.StatusInternalServerError)
+        }
+    }
 
     queryResult, queryErr := database.Query(data)
     if queryErr != nil {

@@ -7,16 +7,18 @@ import (
 	"net/http"
 
 	// test data package
-	"setbase/src/test_db"
 )
 
 func main() {
     const port string = "9090"
 
-    dd := &db.DB{}
-    dd.Fill(test_db.DB)
+    //dd := &db.DB{}
+    //dd.Fill(test_db.DB)
+
+    db.StartDb()
 
     http.HandleFunc("/", server.GeneralHandle)
+    http.HandleFunc("/media/", server.StaticServe)
     http.HandleFunc("/api", server.QueryPost)
     http.HandleFunc("/api/", server.QueryPost)
 
