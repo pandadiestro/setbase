@@ -11,22 +11,31 @@ import (
 var database *db.DB
 
 func EnableEndpoint(w *http.ResponseWriter) {
-    (*w).Header().Set("Access-Control-Allow-Methods", "\"POST\", \"OPTIONS\"");
+    (*w).Header().Set("Access-Control-Allow-Methods", "ANY");
     (*w).Header().Set("Access-Control-Allow-Origin", "*");
     (*w).Header().Set("Access-Control-Allow-Headers", "*");
 }
 
 func GeneralHandle(w http.ResponseWriter, r *http.Request) {
+    EnableEndpoint(&w)
     if ((*r).Method == "OPTIONS") {
-        EnableEndpoint(&w);
-        w.WriteHeader(200);
+        w.Write([]byte("hola " + r.RemoteAddr));
+        w.WriteHeader(http.StatusOK);
+        return
     } else {
         w.Write([]byte("hola " + r.RemoteAddr));
+        return
     }
 }
+
 func QueryPost(w http.ResponseWriter, r *http.Request) {
     w.Header().Set("Content-Type", "application/json; charset=utf-8")
     EnableEndpoint(&w)
+
+    if ((*r).Method == "OPTIONS") {
+        w.WriteHeader(http.StatusOK);
+        return
+    }
 
     var data db.Query
     decoder := json.NewDecoder(r.Body)
@@ -56,7 +65,6 @@ func QueryPost(w http.ResponseWriter, r *http.Request) {
     encodeErr := json.NewEncoder(response).Encode(queryResult)
     if encodeErr != nil {
         log.Println("json encode error: " + encodeErr.Error())
-        w.Write([]byte(response.String()))
         w.WriteHeader(http.StatusInternalServerError)
         return
     }
