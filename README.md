@@ -72,11 +72,11 @@ Donde `sets` es una lista de las expresiones (tags, sets, etc.) que se van a usa
 
 ```JSON
 {
-    sets: [
+    "sets": [
         "p",
         "q"
     ],
-    expr: "p && !q"
+    "expr": "p && !q"
 }
 ```
 
@@ -108,11 +108,11 @@ Where `sets` is a list of expressions (such as tags, sets, etc.) which will gonn
 
 ```JSON
 {
-    sets: [
+    "sets": [
         "p",
         "q"
     ],
-    expr: "p && !q"
+    "expr": "p && !q"
 }
 ```
 
