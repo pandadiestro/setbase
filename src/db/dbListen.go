@@ -7,9 +7,8 @@ import (
 	"path/filepath"
 )
 
-var data = []Register{}
+var data []Register
 var dataHome string
-var metaPaths = []string{}
 
 func registerWalkFunc(path string, info os.DirEntry, err error) error {
     if err != nil {
@@ -19,6 +18,7 @@ func registerWalkFunc(path string, info os.DirEntry, err error) error {
     if info.IsDir() || filepath.Ext(info.Name()) != ".META" {
         return nil
     }
+
 
     sets := []string{}
 
@@ -47,7 +47,6 @@ func registerWalkFunc(path string, info os.DirEntry, err error) error {
         Sets: sets,
     })
 
-
     return nil
 }
 
@@ -60,8 +59,9 @@ func StartDb() (*DB, error) {
         return nil, traverseErr
     }
 
-    newBase := &DB{}
-    newBase.Fill(data)
+    newBase := &DB{
+        ListedData: data,
+    }
 
     return newBase, nil
 }

@@ -1,6 +1,12 @@
 # SetBase
 *the boolean database model*
 
+<div style="text-align: center;">
+<video style="width: 75%; height: 75%;" controls>
+<source src="./media/showcase.mp4">
+</video>
+</div>
+
 `(ES)`
 
 SetBase es una base de datos más conceptual que production-ready hecha en go basada en la idea de agrupar datos en sets, las queries están basadas en operaciones booleanas que se traducen como filtros para un grupo determinado de registros. Esto significa que, por ejemplo, `p & !q` significa "todos los registros que pertenezcan a `p` y no a `q`".

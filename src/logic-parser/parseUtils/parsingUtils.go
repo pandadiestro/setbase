@@ -32,6 +32,10 @@ var specials = [...]struct{
         replace: "&",
     },
     {
+        special: "||",
+        replace: "|",
+    },
+    {
         special: "\\/",
         replace: "|",
     },

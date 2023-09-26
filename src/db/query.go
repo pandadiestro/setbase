@@ -8,10 +8,6 @@ import (
 	"strings"
 )
 
-func (database *DB) Fill(data []Register) {
-    (*database).ListedData = data
-}
-
 func (database *DB) Query(queryObj Query) ([]Register, error) {
     var returnable []Register
     var cleansingErr error
@@ -21,7 +17,6 @@ func (database *DB) Query(queryObj Query) ([]Register, error) {
     if (len(queryObj.Sets) > len(parser.Variables)) {
         return returnable, errors.New(fmt.Sprintf("too many sets (%d), max is %d", len(queryObj.Sets), len(parser.Variables)))
     }
-
 
     queryStr := queryObj.Expr
     queryStr, cleansingErr = parseUtils.CleanString(queryStr)
