@@ -1,11 +1,7 @@
 # SetBase
 *the boolean database model*
 
-<div style="text-align: center;">
-<video style="width: 75%; height: 75%;" controls>
-<source src="./media/showcase.mp4">
-</video>
-</div>
+https://github.com/pandadiestro/setbase/assets/71461113/1b133f44-21f3-42db-b8ef-8bc393ed4241
 
 `(ES)`
 
